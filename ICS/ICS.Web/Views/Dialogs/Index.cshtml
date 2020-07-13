@@ -1,0 +1,131 @@
+﻿@model List<ICS.Core.Dtos.Outcome.OutcomeDialog>
+
+@{
+	ViewData["Title"] = "Dialogs";
+}
+
+<h1>Обращения</h1>
+
+<br />
+<div class="main">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-5">
+				@foreach (var item in Model)
+				{
+					<div class="row">
+						<div id="@item.Uuid" onclick="javascript:openDialog('@item.Uuid','@item.SessionUuid')" class="border">
+							<div class="product-info">
+								<a asp-action="index" asp-controller="HistorySession" asp-route-id="@item.SessionUuid">Парковка @item.SessionStartParking.ToShortDateString()</a>
+								<br />
+								<span class="product-title">@item.Messages.Last().Text</span>
+								<div class="price">@item.NumberUnread</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+			<div class="col-md-7" >
+				<div id="chat" class="row layer">
+				</div>
+				<div class="row">
+					<div class="col-md-8">
+						<textarea style="margin-top:10px;width:100%;height:80%;" id="textMessage"></textarea>
+					</div>
+					<div class="col-md-4" style="float:right;">
+						<button style="margin-top:10px;width:100%;height:80%;" onclick="sendMessage()">Отправить</button>
+					</div>
+				</div>
+				</div>
+			</div>
+	</div>
+</div>
+
+<script>
+	var dialogUuid;
+	var sessionUuid;
+	function openDialog(uuidDialog, uuidSession) {
+		dialogUuid = uuidDialog;
+		sessionUuid = uuidSession;
+		$.get({
+			url: 'Dialogs/Messages/' + uuidDialog,
+			dataType: 'json',
+			success: function (messages) {
+				var chat = document.getElementById('chat');
+				chat.innerHTML = "";
+				$.each(messages, function (i) {
+					var message = document.createElement("div");
+					message.classList.add('container2');
+					if (messages[i].IsSender) {
+						message.classList.add('darker');
+						var name = document.createElement("span");
+						name.classList.add('name-right');
+						name.textContent += messages[i].Sender.LastName + ' ' + messages[i].Sender.FirstName + ' ' + messages[i].Sender.PastName;
+						message.appendChild(name);
+						var br1 = document.createElement("br");
+						var br2 = document.createElement("br");
+						message.appendChild(br1);
+						message.appendChild(br2);
+						var text = document.createElement("p");
+						text.textContent += messages[i].Text;
+						message.appendChild(text);
+						var time = document.createElement("span");
+						time.classList.add('time-right');
+						var options = { year: 'numeric', month: 'long', day: 'numeric' };
+						var day = new Date(messages[i].CreatedAt);
+						time.textContent += day.toLocaleDateString("ru", options);
+						message.appendChild(time);
+					}
+					else {
+						var name = document.createElement("span");
+						name.classList.add('name-left');
+						name.textContent += messages[i].Sender.LastName + ' ' + messages[i].Sender.FirstName + ' ' + messages[i].Sender.PastName;
+						message.appendChild(name);
+						var br1 = document.createElement("br");
+						var br2 = document.createElement("br");
+						message.appendChild(br1);
+						message.appendChild(br2);
+						var text = document.createElement("p");
+						text.textContent += messages[i].Text;
+						message.appendChild(text);
+						var time = document.createElement("span");
+						time.classList.add('time-left');
+						var options = { year: 'numeric', month: 'long', day: 'numeric' };
+						var day = new Date(messages[i].CreatedAt);
+						time.textContent += day.toLocaleDateString("ru", options);
+						message.appendChild(time);
+					}
+					chat.appendChild(message);
+					chat.scrollTop = chat.scrollHeight;
+
+					$.post({
+						url: 'Dialogs/SendDialogIsRead/' + uuidDialog,
+						data: {
+						},
+						dataType: 'json',
+						success: function (data) {
+						}
+					});
+				});
+				
+			}
+		});
+	};
+
+	function sendMessage() {
+		var textMessage = document.getElementById('textMessage');
+		$.post({
+			url: 'Dialogs/SendMessage/',
+			data: {
+				Text: document.getElementById('textMessage').value,
+				DialogUuid: dialogUuid,
+				SessionUuid: sessionUuid
+			},
+			dataType: 'json',
+			success: function (data) {
+				textMessage.value = "";
+				openDialog(dialogUuid,sessionUuid);
+			}
+		});
+	};
+</script>

@@ -1,0 +1,77 @@
+﻿@model List<ICS.Core.Dtos.Outcome.OutcomeCluster>
+
+@{
+	ViewData["Title"] = "Clusters";
+}
+
+<h1>Список кластеров</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Название
+			</th>
+			<th>
+				IP адрес
+			</th>
+			<th>
+				Порт
+			</th>
+			<th>
+				Подтверждён
+			</th>
+			<th>
+				Дата создания
+			</th>
+			<th>
+				Прикреплённые парковки
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Name</td>
+				<td>@item.IPAddress</td>
+				<td>@item.Port</td>
+				<td>
+					@if (item.IsConfirmed)
+					{
+						<p>Да</p> 
+					}
+					else
+					{
+						<p>Нет</p>
+					}
+				</td>
+				<td>@item.LastKeepAlive.ToString()</td>
+				<td>
+						<a asp-action="Index" asp-controller="Parkings" asp-all-route-data='new Dictionary<string,string> { { "uuidCluster", item.Uuid } }'>Парковки</a>
+				</td>
+				<td>
+					@if (!item.IsConfirmed)
+					{
+						@using (Html.BeginForm("Confirm", "Clusters", new { uuid = item.Uuid, confirm = true }, FormMethod.Post))
+						{
+
+							<input type="submit" value="Подтвердить" />
+						}
+					}
+					else
+					{
+						@using (Html.BeginForm("Confirm", "Clusters", new { uuid = item.Uuid, confirm = false }, FormMethod.Post))
+						{
+
+							<input type="submit" value="Снять подтверждение" />
+						}
+					}
+
+					<a asp-action="Edit" asp-route-id="@item.Uuid">Изменить</a> @*|
+					<a asp-action="Details" asp-route-id="@item.Uuid">Details</a>*@
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

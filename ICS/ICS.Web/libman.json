@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "bootstrap-multiselect@0.9.15",
+      "destination": "wwwroot/lib/bootstrap-multiselect/"
+    },
+    {
+      "library": "twitter-bootstrap@4.4.0",
+      "destination": "wwwroot/lib/twitter-bootstrap/"
+    },
+    {
+      "library": "jquery@3.5.0",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "markerclustererplus@4.0.1",
+      "destination": "wwwroot/lib/markerclustererplus/"
+    }
+  ]
+}

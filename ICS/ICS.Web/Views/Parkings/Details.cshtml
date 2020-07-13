@@ -1,0 +1,26 @@
+﻿@model ICS.Core.Dtos.Outcome.OutcomeParking
+
+@{
+	ViewData["Title"] = "Parking";
+}
+<h1>Details parking</h1>
+<table class="table" border="1">
+	<thead>
+	</thead>
+	<tbody>
+		<tr>
+			<td>@Html.LabelFor(x => x.Uuid)</td>
+			<td>@Html.TextBoxFor(x => x.Uuid, new { @readonly = "true", @style = "width:400px;" })</td>
+		</tr>
+		<tr>
+			<td>@Html.LabelFor(x => x.LastKeepAlive)</td>
+			<td>@Html.TextBoxFor(x => x.LastKeepAlive, new { @readonly = "true", @style = "width:400px;" })</td>
+		</tr>
+		<tr>
+			<td>@Html.LabelFor(x => x.LastParkingCondition)</td>
+			<td>@Html.TextBoxFor(x => x.LastParkingCondition, new { @readonly = "true", @style = "width:400px;" })</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+<br />

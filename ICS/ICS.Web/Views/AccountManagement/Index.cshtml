@@ -1,0 +1,33 @@
+﻿@model AccountManagement
+
+@{
+    ViewData["Title"] = "AccountManager";
+}
+
+<h1>Управление аккаунтами</h1>
+
+<table class="table">  
+    <thead>
+        <tr>
+            <th>
+                Email пользователя
+            </th>
+            <th>
+                Роль
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.UserRoles)
+        {
+            <tr>
+                <td>@item.User.Email</td>
+                <td>@item.Roles</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.User.Id">Изменить</a> |
+                    <a asp-action="Delete" asp-route-id="@item.User.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

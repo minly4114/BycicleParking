@@ -1,0 +1,50 @@
+﻿@model ParkingPlaceKeepAliveModel
+
+@{
+	ViewData["Title"] = "ParkingPlaceKeepAlives";
+}
+
+<h1>История изменений парковочного места</h1>
+
+<a class="bottomNav" onclick="history.go(-1); return false;" href="#">Назад</a>
+<br />
+@using (Html.BeginForm("Index", "ParkingPlaceKeepAlive", FormMethod.Get))
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Дата
+				</th>
+				<th>
+					Состояние
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<label>Дата с</label>
+					@Html.TextBoxFor(x => Model.DateStart, new { @class = "datefield", type = "date" })
+					<label>Дата по</label>
+					@Html.TextBoxFor(x => Model.DateEnd, new { @class = "datefield", type = "date" })
+				</td>
+				<td>
+				</td>
+				<td>
+					<input type="submit" value="Фильтровать" />
+				</td>
+				<td>
+					@Html.TextBoxFor(x => x.ParkingPlaceUuid, new { @style = "display: none;" })
+				</td>
+			</tr>
+			@foreach (var item in Model.KeepAlives)
+			{
+				<tr>
+					<td>@item.CreatedAt</td>
+					<td>@item.ParkingCondition</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

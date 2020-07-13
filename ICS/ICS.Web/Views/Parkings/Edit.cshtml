@@ -1,0 +1,39 @@
+﻿
+@model ConfigurationParkingModel
+
+@{
+	ViewData["Title"] = "ParkingConfigurations";
+}
+@using (Html.BeginForm("Edit", "Parkings", FormMethod.Post))
+{
+	<h1>Изменить парковку</h1>
+	<table class="table" border="1">
+		<thead>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Uuid</td>
+				<td>@Html.TextBoxFor(x => x.ParkingConfiguration.UuidParking, new { @readonly = "true", @style = "width:400px;" })</td>
+			</tr>
+			<tr>
+				<td>Максимальное количество дней бронирования</td>
+				<td>@Html.TextBoxFor(x => x.ParkingConfiguration.MaxNumberDay, new { @style = "width:400px;" })</td>
+			</tr>
+			<tr>
+				<td>Максимальное количество дней для бронирования</td>
+				<td>@Html.TextBoxFor(x => x.ParkingConfiguration.MaxNumberPlaces, new { @style = "width:400px;" })</td>
+			</tr>
+			<tr>
+				<td>Разрешение бронирования</td>
+				<td>@Html.ListBoxFor(m => m.ReservationAllowedString, Model.ReservationAllowed as List<SelectListItem>, new { @class = "listbox" })</td>
+			</tr>
+		</tbody>
+	</table>
+	<br />
+	<br />
+	<input type="submit" value="Сохранить" />
+}
+
+<script type="text/javascript">
+	$('.listbox').multiselect();
+</script>

@@ -1,0 +1,39 @@
+﻿
+@model ICS.Core.Dtos.Income.IncomeCluster
+
+@{
+	ViewData["Title"] = "Clusters";
+}
+@using (Html.BeginForm("Edit", "Clusters", FormMethod.Post))
+{
+	<h1>Изменение кластера</h1>
+	<table class="table" border="1">
+		<thead>
+		</thead>
+		<tbody>
+			<tr>
+				<td>@Html.LabelFor(x => x.Uuid)</td>
+				<td>@Html.TextBoxFor(x => x.Uuid, new { @readonly = "true", @style ="width:500px" })</td>
+			</tr>
+			<tr>
+				<td>Название</td>
+				<td>@Html.TextBoxFor(x => x.Name, new { @style = "width:500px" })</td>
+			</tr>
+			<tr>
+				<td>IP адрес</td>
+				<td>@Html.TextBoxFor(x => x.IPAddress, new { @style = "width:500px" })</td>
+			</tr>
+			<tr>
+				<td>Порт</td>
+				<td>@Html.TextBoxFor(x => x.Port, new { @style = "width:500px" })</td>
+			</tr>
+		</tbody>
+	</table>
+	<br />
+	<br />
+	<input type="submit" value="Сохранить" />
+}
+
+<script type="text/javascript">
+	$('.listbox').multiselect();
+</script>

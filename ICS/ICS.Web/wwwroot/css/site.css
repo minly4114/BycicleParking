@@ -1,0 +1,265 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.border {
+    width: 300px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border: 1px solid #F1E7E8;
+    float: left;
+}
+
+.wrap {
+    height: 100%;
+    position: relative;
+}
+
+.product-wrap {
+    position: relative;
+}
+
+    .product-wrap:after {
+        content: '';
+        background: rgba(73, 102, 162, .5);
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        opacity: 0;
+        transform: scale(.3);
+        transition: .3s ease-in-out;
+    }
+
+.border:hover .product-wrap:after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.product-wrap a {
+    display: block;
+    text-decoration: none;
+}
+
+.product-wrap img {
+    display: block;
+    width: 100%;
+}
+
+.loop-action {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: .3s ease-in-out;
+}
+
+.border:hover .loop-action {
+    opacity: 1;
+}
+
+.loop-action a {
+    text-decoration: none;
+    display: block;
+    border: 1px solid white;
+    white-space: nowrap;
+    text-transform: uppercase;
+    padding: .5em 1em;
+    font-size: 14px;
+    line-height: 1.6;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    color: white;
+    min-width: 160px;
+    margin: 5px auto;
+    transition: .3s ease-in-out;
+}
+
+    .loop-action a:after {
+        content: '';
+        position: absolute;
+        left: -220%;
+        top: -500%;
+        width: 140%;
+        height: 1000%;
+        transform: rotate(45deg);
+        background: white;
+        z-index: -1;
+        transition: .3s ease-in-out;
+    }
+
+    .loop-action a:hover {
+        color: black;
+    }
+
+        .loop-action a:hover:after {
+            left: 0%;
+        }
+
+.border:hover {
+    border-color: #4966A2;
+}
+
+.product-info {
+    padding-top: 15px;
+    margin-left:0;
+}
+
+.stars {
+    font-size: 14px;
+    font-family: FontAwesome;
+}
+
+    .stars:before {
+        content: "\f005\f005\f005\f005\f123";
+        color: #F2453E;
+    }
+
+.product-title {
+    font-weight: normal;
+    font-family: "Open Sans";
+    color: #162546;
+    font-size: 18px;
+}
+
+.price {
+    font-family: "Open Sans";
+    color: #162546;
+    font-weight: bold;
+    float: right;
+}
+
+.layer {
+    overflow: scroll; /* Добавляем полосы прокрутки */
+    height: 500px; /* Высота блока */
+    padding: 5px; /* Поля вокруг текста */
+    border: solid 1px black; /* Параметры рамки */
+}
+
+/* Chat containers */
+.container2 {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    min-width: 70%;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    float: left;
+    position: relative;
+}
+
+/* Darker chat container */
+.darker {
+    border-color: #ccc;
+    background-color: #ddd;
+    margin-left: 30%;
+    position: relative;
+}
+
+/* Clear floats */
+.container2::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Style time text */
+.time-right {
+    float: right;
+    color: #aaa;
+}
+
+/* Style time text */
+.time-left {
+    float: left;
+    color: #999;
+}
+
+/* Style name text */
+.name-right {
+    float: right;
+    font-weight: bold;
+}
+
+/* Style name text */
+.name-left {
+    float: left;
+    font-weight: bold;
+}

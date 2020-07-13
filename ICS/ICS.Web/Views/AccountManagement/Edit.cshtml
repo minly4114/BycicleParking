@@ -1,0 +1,54 @@
+﻿@model UserRoleModel
+
+@{
+	ViewData["Title"] = "AccountManager";
+}
+@using (Html.BeginForm("Edit", "AccountManagement", FormMethod.Post))
+{
+	<h1>Изменить пользователя</h1>
+	<table class="table" border="1">
+		<thead>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Имя</td>
+				<td>@Html.TextBoxFor(x => x.SupervisorData.FirstName, new { @style = "width:400px;" })</td>
+			</tr>
+			<tr>
+				<td>Фамилия</td>
+				<td>@Html.TextBoxFor(x => x.SupervisorData.LastName, new { @style = "width:400px;" })</td>
+			</tr>
+			<tr>
+				<td>Отчество</td>
+				<td>@Html.TextBoxFor(x => x.SupervisorData.PastName, new { @style = "width:400px;" })</td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td>@Html.TextBoxFor(x => x.User.Email, new { @style = "width:400px;" })</td>
+			</tr>
+			<tr>
+				<td>Номер телефона</td>
+				<td>@Html.TextBoxFor(x => x.User.PhoneNumber, new { @style = "width:400px;" })</td>
+			</tr>
+			<tr>
+				<td>Двухфакторная аутентификация</td>
+				<td>@Html.TextBoxFor(x => x.User.TwoFactorEnabled, new { @style = "width:400px;" })</td>
+			</tr>
+			<tr>
+				<td>Роль</td>
+				<td>@Html.ListBoxFor(m => m.RoleList, Model.RoleItem as List<SelectListItem>, new { @class = "listbox", @style = "width:400px;" })</td>
+			</tr>
+			<tr>
+				<td>Прикреплёные кластера</td>
+				<td>@Html.ListBoxFor(m => m.SupervisorData.ClusterUuids, Model.ClusterItems as List<SelectListItem>, new { @class = "listbox", @style = "width:400px;" })</td>
+			</tr>
+		</tbody>
+	</table>
+	<br />
+	<br />
+	<input type="submit" value="Сохранить" />
+}
+
+<script type="text/javascript">
+	$('.listbox').multiselect();
+</script>

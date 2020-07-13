@@ -1,0 +1,45 @@
+﻿@model List<ICS.Core.Dtos.Outcome.OutcomeParkingPlace>
+
+@{
+	ViewData["Title"] = "ParkingPlaces";
+}
+
+<h1>Список парковочных мест</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Uuid
+			</th>
+			<th>
+				Этаж
+			</th>
+			<th>
+				Номер
+			</th>
+			<th>
+				Текущее состояние
+			</th>
+			<th>
+				Время изменения состояния
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Uuid</td>
+				<td>@item.Level</td>
+				<td>@item.Serial</td>
+				<td>@item.LastPlaceCondition</td>
+				<td>@item.LastKeepAlive</td>
+				<td>
+					@*<a asp-action="Edit" asp-route-id="@item.Uuid">Edit</a> |*@
+					<a asp-action="Index" asp-controller="ParkingPlaceKeepAlive" asp-all-route-data='new Dictionary<string,string> { { "parkingPlaceUuid", item.Uuid.ToString() } }'>История изменений</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

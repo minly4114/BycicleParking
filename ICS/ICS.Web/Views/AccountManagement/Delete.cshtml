@@ -1,0 +1,35 @@
+﻿@model UserRoleModel
+
+@{
+	ViewData["Title"] = "AccountManager";
+}
+<h1>Удаление пользователя</h1>
+<div class="row">
+	<div class="col-md-2">
+		<h4 style="margin-top:30px;">Email</h4>
+	</div>
+	<div class="col-md-2">
+		@Html.TextBoxFor(x => x.User.Email, new { @readonly = true, @style = "margin-top:30px;width:350px" })
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-10">
+		<h4 style="margin-top:30px;">Вы действительно хотите удалить пользователя?</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+			@using (Html.BeginForm("Delete", "AccountManagement", FormMethod.Post))
+			{
+				<input type="submit" value="Да" style="margin-top:30px;width:100%" />
+			}
+		</div>
+		<div class="col-md-2">
+			@using (Html.BeginForm("Index", "AccountManagement", FormMethod.Get))
+			{
+				<input type="submit" value="Нет" style="margin-top:30px;width:100%" />
+			}
+		</div>
+	</div>
+
+
