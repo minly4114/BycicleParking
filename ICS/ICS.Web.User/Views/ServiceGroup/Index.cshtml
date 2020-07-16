@@ -1,0 +1,106 @@
+﻿@model List<ICS.Core.Dtos.OutcomeClient.OutcomeClientServiceGroup>
+
+@{
+	ViewData["Title"] = "ServiceGroups";
+}
+
+<h1>Сервисные группы</h1>
+
+<a asp-action="Create">Создать группу</a>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Название
+			</th>
+			<th>
+				Дата создания
+			</th>
+			<th>
+				Участники
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Name</td>
+				<td>@item.CreatedAt</td>
+				<td>
+					@foreach(var member in item.Members)
+					{
+						string a = " ";
+						@member.LastName
+						@a
+						@member.FirstName
+						@a
+						@member.PastName
+						<br />
+					}
+				</td>
+				@if(item.IsCreator)
+				{
+					<td>
+						<a asp-action="Edit" asp-route-id="@item.Uuid">Изменить</a>
+					</td>
+					<td>
+						<button onclick="deleteClick('@item.Uuid')">Удалить</button>
+					</td>
+				}
+				
+			</tr>
+		}
+	</tbody>
+</table>
+
+<dialog id="dialogDelete" style="height:200px;width:300px;">
+	<form method="dialog">
+		<section>
+			<p>
+				<label for="favAnimal">Вы действительно хотите удалить группу?</label>
+			</p>
+		</section>
+		<menu>
+			<button type="submit">Отмена</button>
+			<button id="btDelete">Удалить</button>
+		</menu>
+	</form>
+</dialog>
+
+<dialog id="status" style="height:300px;width:300px;">
+	<form method="dialog">
+		<section>
+			<p>
+				<label for="favAnimal">Статус удаления:</label>
+				<br />
+				<textarea style="height:150px;width:260px;" id="messageDelete" type="text"></textarea>
+			</p>
+		</section>
+		<menu>
+			<button type="submit" onclick="window.location.reload();">Окей</button>
+		</menu>
+	</form>
+</dialog>
+
+<script>
+	function deleteClick(uuid)
+	{
+		let dialog = document.getElementById('dialogDelete');
+		dialog.showModal();
+
+		let btDelete = document.getElementById('btDelete');
+		btDelete.addEventListener("click", function () {
+			$.post({
+				url: '/ServiceGroup/Delete/' + uuid,
+				success: function (data) {
+					var messageDelete = document.getElementById('messageDelete');
+					messageDelete.value = data;
+					var dialog = document.getElementById('status');
+					dialog.showModal();
+				}
+			});
+		});
+	}
+</script>

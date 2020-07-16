@@ -1,0 +1,46 @@
+﻿@model MessageModel
+
+@{
+	ViewData["Title"] = "Dialog";
+}
+
+@using (Html.BeginForm("Create", "Dialogs", Model.Message, FormMethod.Post))
+{
+	<h1>Создание обращения</h1>
+	<table class="table" border="1">
+		<thead>
+		</thead>
+		<tbody id="tableBody">
+			<tr>
+				<td>Сессия</td>
+				<td><select id="Sessions">
+					</select>
+				<td style="visibility:hidden">@Html.TextBoxFor(x => x.Message.SessionUuid, new { id = "Message_SessionUuid" })</td>
+			</tr>
+			<tr>
+				<td>Текст</td>
+				<td>@Html.TextAreaFor(x => x.Message.Text,new { style ="width:500px;height:200px"})</td>
+			</tr>
+		</tbody>
+	</table>
+	<br />
+	<br />
+	<input type="submit" value="Сохранить" />
+}
+
+<script>
+	let sessions = JSON.parse('@System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(Model.Sessions)');
+	let selectSessions = document.getElementById("Sessions");
+	$.each(sessions, function (i, session) {
+		let option = document.createElement("option");
+		option.text = session.Name;
+		option.value = session.Value;
+		selectSessions.add(option);
+	});
+	let tbuuid = document.getElementById("Message_SessionUuid");
+	tbuuid.value = selectSessions.value;
+	selectSessions.addEventListener("change", function () {
+		let tbuuid = document.getElementById("Message_SessionUuid");
+		tbuuid.value = selectSessions.value;
+	});
+</script>

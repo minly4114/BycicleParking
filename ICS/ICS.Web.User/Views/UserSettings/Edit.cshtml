@@ -1,0 +1,43 @@
+﻿@using ICS.Core.Dtos.Income;
+@model IncomeClient
+
+@{
+	ViewData["Title"] = "UserSettings";
+}
+<h1>Настройки пользователя</h1>
+@using (Html.BeginForm("Edit", "UserSettings", FormMethod.Post))
+{
+	<table class="table" border="1">
+		<thead>
+		</thead>
+		<tbody>
+			<tr>
+				<td>@Html.LabelFor(x => x.FirstName)</td>
+				<td>@Html.TextBoxFor(x => x.FirstName)</td>
+			</tr>
+			<tr>
+				<td>@Html.LabelFor(x => x.LastName)</td>
+				<td>@Html.TextBoxFor(x => x.LastName)</td>
+			</tr>
+			<tr>
+				<td>@Html.LabelFor(x => x.PastName)</td>
+				<td>@Html.TextBoxFor(x => x.PastName)</td>
+			</tr>
+			<tr>
+				<td>@Html.LabelFor(x => x.Phone)</td>
+				<td>@Html.TextBoxFor(x => x.Phone)</td>
+			</tr>
+			<tr>
+				<td>@Html.LabelFor(x => x.CardNumber)</td>
+				<td>@Html.TextBoxFor(x => x.CardNumber)</td>
+			</tr>
+		</tbody>
+	</table>
+	<br />
+	<br />
+	<input type="submit" value="Сохранить" />
+}
+
+<script type="text/javascript">
+	$('.listbox').multiselect();
+</script>

@@ -1,0 +1,174 @@
+﻿@model MapModel
+
+<h1>Парковки</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<div id="map" style="height:500px; width:600px"></div>
+			</td>
+			<td>
+				<div id="info" style="height:500px; width:600px; visibility:hidden">
+					<table class="table">
+						<thead>
+							<tr>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<label>Название</label>
+								</td>
+								<td>
+									<input type="text" readonly id="NameParking"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Адрес</label>
+								</td>
+								<td>
+									<input type="text" readonly id="Address"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Количество парковочных мест</label>
+								</td>
+								<td>
+									<input type="text" readonly id="NumberParkingPlace"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Количество свободных мест сейчас</label>
+								</td>
+								<td>
+									<input type="text" readonly id="NumberFreeParkingPlace"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Выберите дату c</label>
+									<input id="DateStartReservation" type="date" class="datefield" />
+								</td>
+								<td>
+									<label>Выберите дату до</label>
+									<input id="DateEndReservation" type="date" class="datefield" />
+								</td>
+								</tr>
+							<tr>
+								<td>
+									<label>Выберите группу</label>
+									<select id="ServiceGroup">
+									</select>
+								</td>
+								<td>
+									<button id="Reservation">Забронировать</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<dialog id="statusReservation" style="height:300px;width:300px;">
+	<form method="dialog">
+		<section>
+			<p>
+				<label for="favAnimal">Статус бронирования:</label>
+				<br />
+				<textarea style="height:150px;width:260px;" id="messageReservation" type="text" ></textarea>
+			</p>
+		</section>
+		<menu>
+			<button type="submit">Окей</button>
+		</menu>
+	</form>
+</dialog>
+
+
+<script>
+	var map;
+	function initMap() {
+
+		var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 10,
+			center: { lat: 55.751244, lng: 37.618423 }
+		});
+
+		var markers = parkings.map(function (parking, i) {
+			return new google.maps.Marker({
+				position: { lat: parking.LocationLat, lng: parking.LocationLng },
+				title: parking.Name,
+				icon: '/Resources/parking1.png'
+			});
+		});
+		$.each(markers, function (i, marker) {
+			marker.addListener('click', function () {
+				selectMarker(markers, marker);  
+				var tbName = document.getElementById('NameParking');
+				tbName.value = parkings[i].Name;
+				var tbAddress = document.getElementById('Address');
+				tbAddress.value = parkings[i].Address;
+				var tbNumberPlace = document.getElementById('NumberParkingPlace');
+				tbNumberPlace.value = parkings[i].NumberParkingPlace;
+				var tbNumberFreePlace = document.getElementById('NumberFreeParkingPlace');
+				tbNumberFreePlace.value = parkings[i].NumberFreeParkingPlace;
+				var divInfo = document.getElementById('info');
+				divInfo.style = "height:500px; width:600px; visibility:visible"
+				var btReservation = document.getElementById('Reservation');
+				btReservation.addEventListener("click", function () {
+					$.post({
+						url: 'Map/Reservation/' + parkings[i].Uuid,
+						data: {
+							StartParking: document.getElementById('DateStartReservation').value, EndParking: document.getElementById('DateEndReservation').value,
+							UuidParking: parkings[i].Uuid, UuidServiceGroup: document.getElementById('ServiceGroup').value
+						},
+						dataType: 'json',
+						success: function (data) {
+							var messageReservation = document.getElementById('messageReservation');
+							messageReservation.value = data;
+							var dialog = document.getElementById('statusReservation');
+							dialog.showModal();
+						}
+					});
+				});
+			});
+		});
+		var markerCluster = new MarkerClusterer(map, markers,
+			{
+				imagePath: '/Resources/parking'
+			});
+		var markerId = @Model.MarkerId;
+		if (markerId != -1) {
+			google.maps.event.trigger(markers[markerId], 'click');
+		}
+	}
+	var parkings = JSON.parse('@System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(Model.Parkings)');
+	let groups = JSON.parse('@System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(Model.Groups)');
+	let selectGroups = document.getElementById("ServiceGroup");
+	$.each(groups, function (i, group) {
+		var option = document.createElement("option");
+		option.text = group.Name;
+		option.value = group.Uuid;
+		selectGroups.add(option);
+	});
+	function selectMarker(markers, marker) {
+		$.each(markers, function (i) {
+			markers[i].setIcon("/Resources/parking1.png");  
+		});
+		marker.setIcon("/Resources/parking2.png"); 
+	}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtXCVlCyOgK8sCA5uepOonCbu8hVgXKYs&callback=initMap" async defer></script>
+<script src="~/lib/markerclusterplus/markerclustererplus.min.js">
+</script>

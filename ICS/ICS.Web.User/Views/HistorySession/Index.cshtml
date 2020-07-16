@@ -1,0 +1,99 @@
+﻿@using ICS.Web.User.Localization;
+@model List<ICS.Core.Dtos.OutcomeClient.OutcomeClientSession>
+
+@{
+	ViewData["Title"] = "HistorySessions";
+}
+
+<h1>История сессий</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Название парковки
+			</th>
+			<th>
+				Название сервисной группы
+			</th>
+			<th>
+				Текущее состояние
+			</th>
+			<th>
+				Дата паркования
+			</th>
+			<th>
+				Дата возвращения велосипеда
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td><a asp-action="index" asp-controller="Map" asp-route-id="@item.ParkingUuid">@item.ParkingName</a> </td>
+				<td><a asp-action="index" asp-controller="ServiceGroup" asp-route-id="@item.ServiceGroupUuid">@item.ServiceGroupName</a></td>
+				<td>@EnumLocalization.LocalizationSessionCondition(item.CurrentCondition)</td>
+				<td>@item.StartParking.ToShortDateString()</td>
+				<td>@item.EndParking.ToShortDateString()</td>
+				@if (item.CurrentCondition==ICS.Core.Dtos.SessionCondition.Reservation)
+				{
+					<td>
+						<button onclick="deleteClick('@item.Uuid')">Отменить бронирование</button>
+					</td>
+				}
+
+			</tr>
+		}
+	</tbody>
+</table>
+
+<dialog id="dialogDelete" style="height:200px;width:300px;">
+	<form method="dialog">
+		<section>
+			<p>
+				<label for="favAnimal">Вы действительно хотите отменить бронирование?</label>
+			</p>
+		</section>
+		<menu>
+			<button type="submit">Нет</button>
+			<button id="btDelete">Да</button>
+		</menu>
+	</form>
+</dialog>
+
+<dialog id="status" style="height:300px;width:300px;">
+	<form method="dialog">
+		<section>
+			<p>
+				<label for="favAnimal">Статус отмены:</label>
+				<br />
+				<textarea style="height:150px;width:260px;" id="messageDelete" type="text"></textarea>
+			</p>
+		</section>
+		<menu>
+			<button type="submit" onclick="window.location.reload();">Окей</button>
+		</menu>
+	</form>
+</dialog>
+
+<script>
+	function deleteClick(uuid)
+	{
+		let dialog = document.getElementById('dialogDelete');
+		dialog.showModal();
+
+		let btDelete = document.getElementById('btDelete');
+		btDelete.addEventListener("click", function () {
+			$.post({
+				url: '/HistorySession/Delete/' + uuid,
+				success: function (data) {
+					var messageDelete = document.getElementById('messageDelete');
+					messageDelete.value = data;
+					var dialog = document.getElementById('status');
+					dialog.showModal();
+				}
+			});
+		});
+	}
+</script>

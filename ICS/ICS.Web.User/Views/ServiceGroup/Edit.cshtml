@@ -1,0 +1,117 @@
+﻿@using Newtonsoft.Json;
+@model ServiceGroupModel
+
+@{
+	ViewData["Title"] = "Service group";
+}
+
+@using (Html.BeginForm("Edit", "ServiceGroup", Model, FormMethod.Post))
+{
+	<h1>Изменение группы</h1>
+	<table class="table" border="1">
+		<thead>
+		</thead>
+		<tbody id="tableBody">
+			<tr>
+				<td>Название</td>
+				<td>@Html.TextBoxFor(x => x.Group.Name)</td>
+			</tr>
+			<tr>
+				<td colspan="2">Участники группы</td>
+
+			</tr>
+			<tr>
+				<td>
+					<label>Введите номер карты</label>
+					<input type="text" id="cardNumber" />
+				</td>
+				<td>
+					<input type="button" value="Добавить" id="btAddMember" />
+				</td>
+			</tr>
+			@foreach (var member in Model.Group.Members)
+			{
+				var a = " ";
+				var btid = "bt" + member.CardNumber;
+				var memid = "me" + member.CardNumber; 
+				<tr style="visibility:visible" id=@member.CardNumber>
+					<td>
+						<input readonly type="text" value="@member.LastName @a @member.FirstName @a @member.PastName" width="500" />
+					</td>
+					<td> <input id=@btid type="button" value="Удалить" /></td>
+					<td style="visibility:collapse">
+						<input id=@memid name="Members" value="@member.CardNumber" />
+					</td>
+				</tr>
+			}
+
+		</tbody>
+	</table>
+	<br />
+	<br />
+	<input type="submit" value="Сохранить" />
+}
+<script type="text/javascript">
+	let members = JSON.parse('@System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(Model.Members)');
+	$.each(members, function (i, member) {
+		var data = JSON.parse('@System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(JsonConvert.SerializeObject(Model))')
+		let button = document.getElementById("bt"+member.CardNumber);
+		button.addEventListener("click", function () {
+			var block = document.getElementById(member.CardNumber);
+			var mem = document.getElementById("me" + member.CardNumber);
+			mem.value = "";
+			block.style.visibility = 'collapse';
+		});
+	});
+	let btAddMember = document.getElementById("btAddMember");
+	btAddMember.addEventListener("click", function () {
+		let number = document.getElementById("cardNumber");
+		$.get({
+			url: '/ServiceGroup/GetMember/' + number.value,
+			dataType: 'json',
+			success: function (data) {
+				var row = document.getElementById(data.cardNumber);
+				if (row != null) {
+					row.style = 'visibility:visible';
+					var mem = document.getElementById("me" + data.cardNumber);
+					mem.value = data.cardNumber;
+				}
+				else {
+					let tableBody = document.getElementById("tableBody");
+					var newRow = tableBody.insertRow();
+					newRow.style = 'visibility:visible'
+					newRow.id = data.cardNumber;
+
+					var newCell1 = newRow.insertCell(0);
+					var newCell2 = newRow.insertCell(1);
+
+					var newText = document.createElement('input')
+					newText.type = 'text';
+					newText.value = data.lastName + ' ' + data.firstName + ' ' + data.pastName;
+					newCell1.appendChild(newText);
+
+					var newButton = document.createElement('input')
+					newButton.type = 'button';
+					newButton.value = 'Удалить';
+					newButton.addEventListener("click", function () {
+						var block = document.getElementById(data.cardNumber);
+						var mem = document.getElementById("me" + data.cardNumber);
+						mem.value = "";
+						block.style.visibility = 'collapse';
+					});
+					newCell2.appendChild(newButton);
+
+					var cell = newRow.insertCell(2);
+					cell.style.visibility = 'collapse';
+					var text = document.createElement('input');
+					text.id = "me" + data.cardNumber;
+					text.name = 'Members';
+					text.type = 'text';
+					text.value = data.cardNumber;
+					cell.appendChild(text);
+				}
+			}
+		});
+	});
+</script>
+
